@@ -1,0 +1,9 @@
+Name="Web"
+Desc="网页"
+UA="Finding+/1.0"
+Type="Text"
+Url="http://127.0.0.1"
+[TextProgress]
+Title="body div .title"
+Link=".body div .link"
+P="body p"
