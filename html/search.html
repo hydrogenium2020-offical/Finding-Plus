@@ -1,0 +1,182 @@
+{{define "search.tmpl"}}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- MDUI CSS -->
+    <link rel="stylesheet" href="../static/mdui-v0.4.3/css/mdui.css" />
+    <title>Finding+ Reslut</title>
+    <!-- MDUI JavaScript -->
+    <script src="../static/mdui-v0.4.3/js/mdui.min.js"></script>
+
+    <script>
+
+        var $ = mdui.JQ
+        function getDialog(str, pre,obj) {
+            mdui.confirm('你确定屏蔽吗' + str,
+                function () {
+                    $.ajax({
+                        method: 'get', url: pre, success: function (r) {
+                            $(obj).hide()
+                            mdui.snackbar({
+                                message: '成功!' + r
+                            });
+                        }
+                    })
+                },
+                function () {
+
+                }
+            );
+        }
+        function getUrl(str) {
+            try {
+                var url = new URL(str)
+                return url
+            } catch (e) {
+                mdui.snackbar({
+                    message: '错误' + e
+                });
+                throw "错误"
+            }
+        }
+        function disable(obj) {
+            
+        }
+        /*
+        function like(obj) {
+            str = $(obj).parent().parent().parent().children('.finding-link').text()
+            console.log(getUrl(str).hostname)
+        }
+        function dislike(obj) {
+            str = $(obj).parent().parent().parent().children('.finding-link').text()
+            console.log(getUrl(str).hostname)
+        }*/
+
+        $(function () {
+
+            $('.disabled-button').on('click', function (e) {
+                var inst = new mdui.Menu($(e.target).parent(), $(e.target).parent().parent().find('.mdui-menu'));
+                inst.open()
+
+            })
+        })
+
+
+    </script>
+
+</head>
+
+<body
+    class="mdui-theme-layout-auto  mdui-theme-accent-light-blue mdui-theme-primary-blue mdui-appbar-with-toolbar mdui-appbar-with-tab mdui-theme-layout-auto">
+
+    <header class="appbar mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-hide">
+
+        <div class="mdui-toolbar mdui-color-theme-600">
+            <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white"
+                mdui-drawer="{target: '#drawer', swipe: true}">
+                <i class="mdui-icon material-icons">menu</i>
+            </span>
+
+            <span class="mdui-typo-title">Finding+</span>
+            <div class="mdui-toolbar-spacer"></div>
+
+            <form method="get" action="./search">
+                <div class="mdui-valign">
+                    <div class="mdui-textfield mdui-col-xs-8">
+
+                        <input
+                            class="mdui-textfield-input  mdui-img-circle mdui-color-white mdui-spinner-circle mdui-card"
+                            name="query" value="{{.query}}" type="text" />
+                    </div>
+                    <div class="mdui-col-xs-1">
+                        <button type="submit"
+                            class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-600 mdui-btn-block"><i
+                                class="mdui-icon material-icons">&#xe8b6;</i></button>
+                    </div>
+                </div>
+            </form>
+
+            <a href="." class="mdui-btn mdui-btn-icon">
+                <i class="mdui-icon material-icons">refresh</i>
+            </a>
+
+
+        </div>
+        <div class="mdui-tab mdui-color-theme-600" mdui-tab>
+
+            <a href="index" class="mdui-ripple mdui-ripple-white">网页</a>
+            <a href="index" class="mdui-ripple mdui-ripple-white">图片</a>
+        </div>
+    </header>
+
+    <div class="container p-appbar mdui-container ">
+        <div class="mdui-row mdui-row-gapless">
+
+
+            <ul class="mdui-list mdui-col-xs-12 ">
+
+                {{range .result}}
+                <p class="mdui-text-color-theme-accent mdui-col-xs-12 mdui-text-left">{{.Name}}</p>
+
+                {{range .Data}}
+
+
+                <div class="mdui-text">
+                    <a href="{{.Link}}" class=" mdui-list-item mdui-ripple">
+                        <h3 class="finding-title mdui-text-color-theme-500">{{.Title}}</h3>
+                    </a>
+                    </a>
+
+                    <p class="finding-link mdui-text-color-theme-accent mdui-col-xs-11"><a
+                            href="{{.Link}}">{{.Link}}</a></p>
+
+                    <button class="disabled-button mdui-btn mdui-ripple mdui-col-xs-1">
+                        <i class="mdui-icon material-icons">&#xe03b;</i>
+
+                    </button>
+
+
+                    <ul class="mdui-menu">
+
+                        <li class="mdui-menu-item">
+                            <a onclick="javascript:disable(this)" class="mdui-ripple">屏蔽</a>
+                            <!-- <a onclick="javascript:like(this)" class="mdui-ripple">推荐</a> -->
+                            <!-- <a onclick="javascript:dislike(this)" class="mdui-ripple">不推荐</a> -->
+                        </li>
+                    </ul>
+                    <p class="mdui-col-xs-12">{{.P}}
+                    </p>
+                    <div class="mdui-col-xs-12 mdui-divider"></div>
+                </div>
+
+
+                {{end}}
+
+                <div class="">
+                    {{if ge .LastOffset 0}}
+                    <a class="mdui-text-color-theme  " href="search?query={{.Query}}&&offset={{.LastOffset}}"><button
+                            class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-600">上一页</button></a>
+
+                    {{end}}
+
+                    <a class="mdui-text-color-theme " href="search?query={{.Query}}&&offset={{.Offset}}"><button
+                            class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-600 ">下一页</button></a>
+                </div>
+
+
+                {{end}}
+
+            </ul>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
+{{end}}

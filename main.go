@@ -1,7 +1,7 @@
 package main
 
-import findingplus "gitee.com/hydrogenium2020/findingplus/src"
+import "gitee.com/hydrogenium2020/findingplus/src/net"
 
 func main() {
-	findingplus.Http()
+	net.Http()
 }

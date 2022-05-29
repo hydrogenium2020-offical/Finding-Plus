@@ -4,6 +4,11 @@
 *.dll
 *.so
 *.dylib
+*.log
+
+#配置文件及其构建文件
+findingplus.*
+findingplus
 
 # Test binary, built with `go test -c`
 *.test
